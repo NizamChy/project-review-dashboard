@@ -14,12 +14,37 @@ type AuthResponse = {
   token: string;
   user: { id: string; name: string; email: string; role: "STUDENT" | "MENTOR" };
 };
+
+const DEMO_ADMIN = {
+  email: "admin@example.com",
+  password: "ChangeMe123!",
+};
+
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+
+  const [info, setInfo] = useState("");
+
+  function handleAdminLogin() {
+    setEmail(DEMO_ADMIN.email);
+    setPassword(DEMO_ADMIN.password);
+    setError("");
+    setInfo(
+      "Demo admin credentials have been filled in. Click Sign in to access the Admin Dashboard.",
+    );
+  }
+
+  function handleStudentLogin() {
+    setInfo(
+      "To continue as a student, please create your account using the Create a student account link below.",
+    );
+    setError("");
+  }
+
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
@@ -37,6 +62,7 @@ export default function LoginPage() {
       setBusy(false);
     }
   }
+
   return (
     <main className="grid min-h-screen bg-white lg:grid-cols-2">
       <section className="hidden flex-col justify-between bg-indigo-700 p-12 text-white lg:flex">
@@ -78,6 +104,36 @@ export default function LoginPage() {
               Enter your details to continue to your workspace.
             </p>
           </div>
+          {/*  */}
+          {/* Demo Login Options */}
+          <div className="mb-6 grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={handleAdminLogin}
+              className="rounded-xl border border-indigo-200 bg-indigo-50 px-3 py-3 text-sm font-semibold text-indigo-700 transition hover:bg-indigo-100"
+            >
+              Login as Admin
+            </button>
+
+            <button
+              type="button"
+              onClick={handleStudentLogin}
+              className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
+            >
+              Login as Student
+            </button>
+          </div>
+
+          {/* Information Message */}
+          {info && (
+            <div
+              role="status"
+              className="mb-5 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm leading-6 text-blue-700"
+            >
+              {info}
+            </div>
+          )}
+          {/*  */}
           {error && (
             <div className="mb-5">
               <Alert>{error}</Alert>
