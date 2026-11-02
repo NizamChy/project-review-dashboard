@@ -187,9 +187,23 @@ router.patch(
           message:
             "Choose Approved or Rejected and provide a valid review note.",
         });
+
+      // const project = await prisma.project.findUnique({
+      //   where: { id: req.params.id },
+      // });
+
+      const projectId = req.params.id;
+
+      if (typeof projectId !== "string") {
+        return res.status(400).json({
+          message: "Invalid project ID.",
+        });
+      }
+
       const project = await prisma.project.findUnique({
-        where: { id: req.params.id },
+        where: { id: projectId },
       });
+
       if (!project)
         return res.status(404).json({ message: "Project not found." });
       if (project.status !== ProjectStatus.PENDING)
